@@ -1,0 +1,62 @@
+@model IEnumerable<Category>
+@{
+    ViewData["Title"] = "Index";
+    var orderBy = "DisplayOrder";
+    var myModel = Model;
+}
+
+<div class="row p-3">
+    <div class="col-6">
+        <h2 class="text-primary">Lista de Categorias</h2>
+    </div>
+    <div class="col-6 text-end">
+        <a asp-controller="Category" asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i>
+            &nbsp; Criar nova Categoria</a>
+    </div>
+</div>
+
+<table class="table table-bordered table-stripped mx-auto" style="width: calc(100%);">
+    <thead>
+        <tr class="table-active">
+            <th width="50% " onclick="orderBy = 'Name'">
+                Nome da Categoria
+            </th>
+            <th width="30%" onclick="orderBy = 'DisplayOrder'">
+                Ordem de exibição
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (orderBy == "DisplayOrder")
+            myModel = Model.OrderBy(p => p.DisplayOrder);
+
+        @if (orderBy == "Name")
+            myModel = Model.OrderBy(p => p.Name);
+
+        @foreach (var item in myModel)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td class="d-flex align-items-center">
+                    @item.DisplayOrder
+                </td>
+                <td>
+                    <div class="btn-group w-100" role="group">
+                        <a asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id"
+                        class="btn btn-primary d-flex flex-wrap gap-2 justify-content-center"><i
+                            class="bi bi-pencil-square"></i>Editar</a>
+                        <a asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id"
+                        class="btn btn-danger d-flex gap-2 flex-wrap justify-content-center"><i
+                            class="bi bi-trash"></i>Excluir</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
